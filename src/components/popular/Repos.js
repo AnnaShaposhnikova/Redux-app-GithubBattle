@@ -1,13 +1,15 @@
-import React, { memo } from "react";
+import React from "react";
 import { Spinner } from "../spinner/Spinner";
+import { useSelector } from "react-redux";
 
-export const Repos = memo(({ repos }) => {
-    if (!repos) {
+export const Repos = () => {
+    const reposFromState = useSelector(state => state.popularReduser.repos)
+    if (!reposFromState) {
         return <Spinner />;
     } else {
         return (
             <ul className="popular-list">
-                {repos.map((repo, index) => {
+                {reposFromState.map((repo, index) => {
                     return (
                         <li key={repo.id} className="popular-item">
                             <div className="popular-rank">#{index + 1}</div>
@@ -31,4 +33,4 @@ export const Repos = memo(({ repos }) => {
             </ul>
         );
     }
-});
+};

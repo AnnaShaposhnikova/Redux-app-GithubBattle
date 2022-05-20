@@ -1,52 +1,61 @@
 import React from "react";
-import { FetchPopularRepos } from "../../utils/api";
+import { connect } from "react-redux";
 import { SelectedLanguages } from "./SelectedLanguages";
 import { Repos } from "./Repos";
-import { memo } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { setSelectedLanguage} from "./../../redux/actions/popular.actions"
+import {FetchPopularReposThunk} from "../../thunk/popular.thunk";
 
-export const PopularPage = memo(() => {
-    const [selectedLanguage, setSelectedLanguage] = useState("All");
-    const [repos, setRepos] = useState(null);
-    const [error, setError] = useState(null);
+const mapStateToProps = ({popularReduser}) => ({
+   selectedLanguage: popularReduser.selectedLanguage,
+    repos: popularReduser.repos,
+    error: popularReduser.error,
 
-    const selectLanguage = (language) => {
-        if (language !== selectedLanguage && repos) {
-            setSelectedLanguage(language);
-            setRepos(null);
-
-            fetchHandler(language);
-        }
-    };
-
-    const fetchHandler = (language) => {
-        FetchPopularRepos(language)
-            .then((data) => {
-                setSelectedLanguage(language);
-                setRepos(data);
-                setError(null);
-            })
-            .catch((error) => {
-                setError(error.message);
-            });
-    };
-
-    useEffect(() => {
-        fetchHandler(selectedLanguage);
-    }, []);
-
-    if (error) {
-        return <h1>{error}</h1>;
-    } else {
-        return (
-            <div>
-                <SelectedLanguages
-                    selectedLanguage={selectedLanguage}
-                    selectLanguageHandler={selectLanguage}
-                />
-                <Repos repos={repos} />
-            </div>
-        );
-    }
 });
+
+class PopularPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.fetchHandler = this.fetchHandler.bind(this);
+        this.selectLanguage = this.selectLanguage.bind(this);
+    }
+
+    selectLanguage(language) {
+        if (language !== this.props.selectedLanguage){
+            // && this.props.repos) {                                 //!!!!!!!!!!!!!!!!!!
+            this.props.dispatch(setSelectedLanguage(language));
+            // this.props.dispatch(setRepos(null));
+            // this.setState({ selectedLanguage: language });
+            // this.setState({repos: null});
+
+            this.fetchHandler(language);
+        }
+    }
+
+    fetchHandler(language) {
+        this.props.dispatch(FetchPopularReposThunk(language))
+
+
+    }
+
+    componentDidMount() {
+        this.fetchHandler(this.props.selectedLanguage);
+    }
+
+    render() {
+        console.log(this.props.selectedLanguage);
+        if (this.props.error) {
+            return <h1>{this.props.error}</h1>;
+        } else {
+            return (
+                <div>
+                    <SelectedLanguages
+                       selectLanguageHandler={this.selectLanguage}
+                    />
+                    <Repos />
+                </div>
+            );
+        }
+    }
+}
+
+export default connect(mapStateToProps)(PopularPage);

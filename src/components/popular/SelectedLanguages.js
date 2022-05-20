@@ -1,8 +1,8 @@
 import React from "react";
-import { memo } from "react";
+import { useSelector } from "react-redux";
 
-export const SelectedLanguages = memo(
-    ({ selectedLanguage, selectLanguageHandler }) => {
+export const SelectedLanguages =
+    ({selectLanguageHandler }) => {
         const languages = [
             "All",
             "JavaScript",
@@ -11,6 +11,7 @@ export const SelectedLanguages = memo(
             "PHP",
             "Python",
         ];
+        const selectedLanguageFromState = useSelector(state => state.popularReduser.selectedLanguage)
         return (
             <ul className="languages">
                 {languages.map((language, index) => (
@@ -18,7 +19,7 @@ export const SelectedLanguages = memo(
                         key={index}
                         style={{
                             color:
-                                selectedLanguage === language
+                                selectedLanguageFromState === language
                                     ? "red"
                                     : "#000000",
                         }}
@@ -29,5 +30,5 @@ export const SelectedLanguages = memo(
                 ))}
             </ul>
         );
-    }
-);
+    };
+

@@ -1,10 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+
 import { Nav } from "./Nav";
 import { Footer } from "./Footer";
 import { HomePage } from "./HomePage";
-import { PopularPage } from "./popular/PopularPage";
-
+import PopularPage from "./popular/PopularPage";
 import  BattlePage  from "./battle/BattlePage";
 import { Results } from "./battle/Results";
 

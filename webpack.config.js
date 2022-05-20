@@ -2,8 +2,10 @@ const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
+    // mode: "development",
+    // devtool: 'source-map',
     entry: [
-        "webpack-dev-server/client?http://localhost:8080",       
+        "webpack-dev-server/client?http://localhost:8080",
         "./src/index.js",
     ],
 
