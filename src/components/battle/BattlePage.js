@@ -1,58 +1,64 @@
-import React, { useState } from "react";
+import React from "react";
 import { PlayerInput } from "./PlayerInput";
 import { Link } from "react-router-dom";
 import { PlayerPreview } from "./PlayerPreview";
+import {connect} from "react-redux";
+import {setPlayerOneImage, setPlayerOneName, setPlayerTwoName,setPlayerTwoImage} from "../../redux/actions/battle.actions";
 
-export default class Battle extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            playerOneName: "",
-            playerTwoName: "",
-            playerOneImage: null,
-            playerTwoImage: null,
-        };
+const mapStateToProps = ({battleReducer}) => ({
+    playerOneName: battleReducer.playerOneName,
+    playerTwoName: battleReducer.playerTwoName,
+    playerOneImage: battleReducer.playerOneImage,
+    playerTwoImage: battleReducer.playerTwoImage,
+})
 
-        this.handleSubmit = this.handleSubmit.bind(this);
+class BattlePage extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.handleSubmitPlayerOne = this.handleSubmitPlayerOne.bind(this);
+        this.handleSubmitPlayerTwo = this.handleSubmitPlayerTwo.bind(this);
     }
 
-    handleSubmit(id, username) {
-        this.setState({
-            [id + "Name"]: username,
-            [id + "Image"]: `https://github.com/${username}.png?size200`,
-        });
+    handleSubmitPlayerOne(username) {
+        this.props.dispatch(setPlayerOneName(username));
+        this.props.dispatch(setPlayerOneImage(`https://github.com/${username}.png?size200`));
     }
 
-    handleReset(id) {
-        this.setState({
-            [id + "Name"]: "",
-            [id + "Image"]: null,
-        });
+    handleSubmitPlayerTwo(username) {
+        this.props.dispatch(setPlayerTwoName(username));
+        this.props.dispatch(setPlayerTwoImage(`https://github.com/${username}.png?size200`));
+    }
+
+    handleResetPlayerOne() {
+        this.props.dispatch(setPlayerOneName(""));
+       this.props.dispatch(setPlayerTwoImage(null));
+    }
+
+    handleResetPlayerTwo() {
+        this.props.dispatch(setPlayerTwoName(""));
+        this.props.dispatch(setPlayerTwoImage(null));
     }
 
     render() {
-        const { playerOneName, playerTwoName, playerOneImage, playerTwoImage } =
-            this.state;
-
         const match = this.props.match;
 
         return (
             <div>
                 <div className="row">
-                    {!playerOneName ? (
+                    {!this.props.playerOneName ? (
                         <PlayerInput
-                            id="playerOne"
                             label="Player One"
-                            onSubmit={this.handleSubmit}
+                            onSubmit={this.handleSubmitPlayerOne}
                         />
                     ) : (
                         <PlayerPreview
-                            username={playerOneName}
-                            avatar={playerOneImage}
+                            username={this.props.playerOneName}
+                            avatar={this.props.playerOneImage}
                         >
                             <button
                                 className="reset"
-                                onClick={this.handleReset.bind(
+                                onClick={this.handleResetPlayerOne.bind(
                                     this,
                                     "playerOne"
                                 )}
@@ -61,20 +67,19 @@ export default class Battle extends React.Component {
                             </button>
                         </PlayerPreview>
                     )}
-                    {!playerTwoName ? (
+                    {!this.props.playerTwoName ? (
                         <PlayerInput
-                            id="playerTwo"
                             label="Player Two"
-                            onSubmit={this.handleSubmit}
+                            onSubmit={this.handleSubmitPlayerTwo}
                         />
                     ) : (
                         <PlayerPreview
-                            username={playerTwoName}
-                            avatar={playerTwoImage}
+                            username={this.props.playerTwoName}
+                            avatar={this.props.playerTwoImage}
                         >
                             <button
                                 className="reset"
-                                onClick={this.handleReset.bind(
+                                onClick={this.handleResetPlayerTwo.bind(
                                     this,
                                     "playerTwo"
                                 )}
@@ -84,12 +89,12 @@ export default class Battle extends React.Component {
                         </PlayerPreview>
                     )}
                 </div>
-                {playerOneName && playerTwoName && (
+                {this.props.playerOneName && this.props.playerTwoName && (
                     <Link
                         className="button"
                         to={{
                             pathname: `${match.url}/results`,
-                            search: `?playerOneName=${playerOneName}&playerTwoName=${playerTwoName}  `,
+                            search: `?playerOneName=${this.props.playerOneName}&playerTwoName=${this.props.playerTwoName}  `,
                         }}
                     >
                         Battle
@@ -99,3 +104,5 @@ export default class Battle extends React.Component {
         );
     }
 }
+
+export default connect(mapStateToProps)(BattlePage);

@@ -1,15 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 
-export const PlayerInput = ({ id, label, onSubmit }) => {
-    const [username, setUsername] = useState("");
-
-    const handleChange = (event) => {
-        setUsername(event.target.value);
-    };
+export const PlayerInput = ({ label, onSubmit }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        onSubmit(id, username);
+        const username = event.target.getElementsByTagName("input")[0].value;
+        onSubmit(username);
     };
 
     return (
@@ -18,14 +14,11 @@ export const PlayerInput = ({ id, label, onSubmit }) => {
                 {label}
             </label>
             <input
-                id="username"
                 type="text"
                 placeholder="Github Username"
                 autoComplete="off"
-                value={username}
-                onChange={handleChange}
             />
-            <button className="button" disabled={!username} type="submit">
+            <button className="button" type="submit">
                 Submit
             </button>
         </form>

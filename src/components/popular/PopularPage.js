@@ -2,14 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { SelectedLanguages } from "./SelectedLanguages";
 import { Repos } from "./Repos";
-import { setSelectedLanguage} from "./../../redux/actions/popular.actions"
+import { setSelectedLanguage, setReposToNull} from "../../redux/actions/popular.actions"
 import {FetchPopularReposThunk} from "../../thunk/popular.thunk";
 
-const mapStateToProps = ({popularReduser}) => ({
-   selectedLanguage: popularReduser.selectedLanguage,
-    repos: popularReduser.repos,
-    error: popularReduser.error,
-
+const mapStateToProps = ({popularReducer}) => ({
+   selectedLanguage: popularReducer.selectedLanguage,
+    repos: popularReducer.repos,
+    error: popularReducer.error,
 });
 
 class PopularPage extends React.Component {
@@ -20,21 +19,15 @@ class PopularPage extends React.Component {
     }
 
     selectLanguage(language) {
-        if (language !== this.props.selectedLanguage){
-            // && this.props.repos) {                                 //!!!!!!!!!!!!!!!!!!
+        if (language !== this.props.selectedLanguage && this.props.repos){
             this.props.dispatch(setSelectedLanguage(language));
-            // this.props.dispatch(setRepos(null));
-            // this.setState({ selectedLanguage: language });
-            // this.setState({repos: null});
-
+            this.props.dispatch(setReposToNull());
             this.fetchHandler(language);
         }
     }
 
     fetchHandler(language) {
-        this.props.dispatch(FetchPopularReposThunk(language))
-
-
+        this.props.dispatch(FetchPopularReposThunk(language));
     }
 
     componentDidMount() {
@@ -42,7 +35,6 @@ class PopularPage extends React.Component {
     }
 
     render() {
-        console.log(this.props.selectedLanguage);
         if (this.props.error) {
             return <h1>{this.props.error}</h1>;
         } else {
@@ -57,5 +49,4 @@ class PopularPage extends React.Component {
         }
     }
 }
-
 export default connect(mapStateToProps)(PopularPage);

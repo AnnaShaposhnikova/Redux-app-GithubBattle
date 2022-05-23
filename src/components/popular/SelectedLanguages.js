@@ -11,7 +11,7 @@ export const SelectedLanguages =
             "PHP",
             "Python",
         ];
-        const selectedLanguageFromState = useSelector(state => state.popularReduser.selectedLanguage)
+        const selectedLanguageFromState = useSelector(state => state.popularReducer.selectedLanguage)
         return (
             <ul className="languages">
                 {languages.map((language, index) => (

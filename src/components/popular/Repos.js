@@ -3,7 +3,7 @@ import { Spinner } from "../spinner/Spinner";
 import { useSelector } from "react-redux";
 
 export const Repos = () => {
-    const reposFromState = useSelector(state => state.popularReduser.repos)
+    const reposFromState = useSelector(state => state.popularReducer.repos)
     if (!reposFromState) {
         return <Spinner />;
     } else {

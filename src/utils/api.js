@@ -49,14 +49,14 @@ const getUserData = (player) => {
             profile,
             score: calculateScore(profile, repos),
         }))
-        .catch(handleErrors);
+
 };
 
 export const battle = (players) => {
     return axios
         .all(players.map(getUserData))
         .then(sortPlayers)
-        .catch(handleErrors);
+
 };
 
 export const FetchPopularRepos = (language) => {

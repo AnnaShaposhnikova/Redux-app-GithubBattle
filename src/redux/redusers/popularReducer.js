@@ -7,7 +7,7 @@ export const initialState = {
     error: null,
 }
 
-export const popularReduser = (state = initialState, action) => {
+export const popularReducer = (state = initialState, action) => {
     switch (action.type) {
         case  POPULAR_ENTITY.SET_SELECTED_LANGUAGE :
             state.selectedLanguage = action.payload;
@@ -29,9 +29,13 @@ export const popularReduser = (state = initialState, action) => {
             state.error = action.payload;
             return Object.assign({}, state);
 
+        case POPULAR_ENTITY.SET_REPOS_TO_NULL:
+            state.loading = false;
+            state.error = null;
+            state.repos = null;
+            return  Object.assign({}, state);
+
         default:
             return state;
     }
-    
-
 }

@@ -1,11 +1,12 @@
-import React, { Profiler } from "react";
-import { PlayerPreview } from "./PlayerPreview";
+import React, {Profiler} from "react";
+import {PlayerPreview} from "./PlayerPreview";
 
-export const Player = ({ label, score, profile }) => {
+export const Player = ({label, score, profile}) => {
+
     return (
         <div>
             <h1 className="header"> {label}</h1>
-            <h3 style={{ textAlign: "center" }}>{score}</h3>
+            <h3 style={{textAlign: "center"}}>{score}</h3>
             <PlayerPreview avatar={profile.avatar_url} username={profile.login}>
                 <ul className="space-list-items">
                     {profile.name && <li>{profile.name}</li>}
